@@ -1,0 +1,27 @@
+{
+  "name": "srams-api",
+  "version": "1.0.0",
+  "description": "Student Records and Academic Management System (SRAMS) RestFull API",
+  "keywords": [
+    "SRAMS"
+  ],
+  "homepage": "https://github.com/Anco-Sam-Franco-B/Student-Records-and-Academic-Management-System-SRAMS#readme",
+  "bugs": {
+    "url": "https://github.com/Anco-Sam-Franco-B/Student-Records-and-Academic-Management-System-SRAMS/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anco-Sam-Franco-B/Student-Records-and-Academic-Management-System-SRAMS.git"
+  },
+  "license": "ISC",
+  "author": "Sam Franco BYIRINGIRO",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "dotenv": "^17.4.2",
+    "nodemon": "^3.1.14"
+  }
+}
