@@ -11,6 +11,9 @@ import logger from "./config/logger.js";
 import { sendStartupNotification } from "./utils/startupNotification.js";
 import { initializeDatabase } from "./database/initDatabase.js";
 import pool from "./config/db.js";
+import "./cron/databaseBackup.js";
+import sramsRoutes from "./routes/index.js";
+
 
 
 dotenv.config();
@@ -27,25 +30,22 @@ loader.add("Loading Environment Variables", async () => {
         throw new Error("DATABASE_URL missing");
 
 });
-
 loader.add("Checking PostgreSQL Connection", async () => {
     await pool.query("SELECT NOW()");
 });
-
 loader.add("Initializing Database Schema", async () =>{
     await initializeDatabase();
 })
-
 loader.add("Loading Middleware", async () => {
     app.use(express.json());
+    app.use(express.urlencoded({extended: true}))
 });
-
 loader.add("Loading Routes", async () => {
     app.get("/", (req, res) => {
         res.send("SRAMS API Running");
     });
+    app.use('/api/v1', sramsRoutes);
 });
-
 loader.add("Checking Upload Folder", async () => {
     //Create the folder if it doesn't exist
     const uploadPath = path.join(process.cwd(), "uploads");
@@ -65,7 +65,6 @@ loader.add("Checking Upload Folder", async () => {
         constants.W_OK
     );
 });
-
 loader.add("Checking SMTP Server", async () => {
 
     if (
@@ -80,7 +79,6 @@ loader.add("Checking SMTP Server", async () => {
     await transporter.verify();
 
 });
-
 loader.add("Testing Email Service", async () => {
 
     await transporter.verify();
@@ -92,7 +90,6 @@ loader.add("Testing Email Service", async () => {
     }
 
 });
-
 loader.add("Checking Upload Directory", async () => {
     const uploadDir = path.join(process.cwd(), "uploads");
 
@@ -104,7 +101,6 @@ loader.add("Checking Upload Directory", async () => {
     // Verify it exists and is writable
     await fs.access(uploadDir, constants.W_OK);
 });
-
 loader.add("Loading Winston Logger", async () => {
     if (!logger) {
         throw new Error("Winston logger is not initialized.");
@@ -117,7 +113,6 @@ loader.add("Loading Winston Logger", async () => {
     logger.info("========================================");
 
 });
-
 loader.add("Loading Authentication", async () => {
 
     const required = [
@@ -143,11 +138,9 @@ loader.add("Loading Authentication", async () => {
 
     jwt.verify(token, process.env.JWT_SECRET);
 });
-
 loader.add("Loading Scheduler", async () => {
     startCronJobs();
 });
-
 loader.add("Starting HTTP Server", async () => {
     await new Promise((resolve) => {
         app.listen(process.env.PORT, () => {
