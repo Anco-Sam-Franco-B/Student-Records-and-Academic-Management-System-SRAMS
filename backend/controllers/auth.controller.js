@@ -1,6 +1,7 @@
 import pool from '../config/db.js'
 import logger from '../config/logger.js';
 import { sendEmail } from '../services/emailService.js';
+import bcrypt from 'bcrypt'
 
 export const createAccount=async(req, res)=>{
     const { fname, lname, email, password } = req.body
@@ -25,7 +26,7 @@ export const createAccount=async(req, res)=>{
 
     try {
         //Get default role
-        const roles= await pool.query(`SELECT id, name FROM roles WHERE name='Administrator'`);
+        const roles= await pool.query(`SELECT id, name FROM roles WHERE name='Visitor'`);
         const role=roles.rows[0]
 
         // Hash password
