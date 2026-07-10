@@ -13,15 +13,21 @@ import { initializeDatabase } from "./database/initDatabase.js";
 import pool from "./config/db.js";
 import "./cron/databaseBackup.js";
 import sramsRoutes from "./routes/index.js";
-
-
+import cors from 'cors'
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 const app = express();
-
-
 const loader = new StartupLoader();
+
+const strictCorsOptions = {
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],      // Block unapproved HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'],       // Define explicit headers
+    credentials: true,
+    withCredentials:true,                                       // Allow cookies/auth sessions
+};
 
 loader.add("Loading Environment Variables", async () => {
     if (!process.env.PORT)
@@ -39,6 +45,8 @@ loader.add("Initializing Database Schema", async () =>{
 loader.add("Loading Middleware", async () => {
     app.use(express.json());
     app.use(express.urlencoded({extended: true}))
+    app.use(cors(strictCorsOptions))
+    app.use(cookieParser())
 });
 loader.add("Loading Routes", async () => {
     app.get("/", (req, res) => {
