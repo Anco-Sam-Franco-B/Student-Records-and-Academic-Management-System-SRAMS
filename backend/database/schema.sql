@@ -76,6 +76,12 @@ CREATE TABLE IF NOT EXISTS classes(
  capacity INT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS admission_sequences (
+    id SERIAL PRIMARY KEY,
+    admission_year INT UNIQUE NOT NULL,
+    last_number INT DEFAULT 0
+);
+
 CREATE TABLE IF NOT EXISTS students(
  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
  admission_no VARCHAR(50) UNIQUE NOT NULL,

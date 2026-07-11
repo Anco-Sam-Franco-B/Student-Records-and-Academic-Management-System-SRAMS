@@ -19,8 +19,6 @@ createRoot(document.getElementById('root')).render(
         <BrowserRouter>
           <Toaster
                 position="top-right"
-                reverseOrder={false}
-                gutter={12}
                 toastOptions={{
                     duration: 1000,
                 }}
